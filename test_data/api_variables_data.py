@@ -1,0 +1,5 @@
+WSDL = 'http://users.bugred.ru/tasks/soap/WrapperSoapServer.php?wsdl'
+DO_REGISTER_REST = 'http://users.bugred.ru/tasks/rest/doregister?email={}&name={}&password={}'
+DO_REGISTER_SOAP = 'http://users.bugred.ru/tasks/soap/WrapperSoapServer.php'
+REST_POST = 'http://users.bugred.ru/tasks/rest/list'
+DO_LOGIN = 'http://users.bugred.ru/tasks/rest/dologin?email={}&password={}'
