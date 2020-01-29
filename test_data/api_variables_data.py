@@ -1,3 +1,7 @@
+from faker import Faker
+
+faker = Faker()
+
 WSDL = 'http://users.bugred.ru/tasks/soap/WrapperSoapServer.php?wsdl'
 DO_REGISTER_REST = 'http://users.bugred.ru/tasks/rest/doregister?email={}&name={}&password={}'
 DO_REGISTER_SOAP = 'http://users.bugred.ru/tasks/soap/WrapperSoapServer.php'
@@ -7,3 +11,9 @@ CURL = 'curl -X POST --header "Content-Type: application/json" "http://users.bug
 CURL_2 = 'curl -i -X POST -H "Content-Type: application/json" -d "{\"email\": \"mailchik@gmail.com\", \"name\": \"Marmelad\", \"password\": \"1\"}" http://users.bugred.ru/tasks/rest/doregister'
 CURL_3 = 'curl -d "{\"email\": \"mailchik1@gmail.com\", \"name\": \"Marmelad1\", \"password\": \"1\"}" http://users.bugred.ru/tasks/rest/doregister'
 
+"""DoRegister"""
+
+new_name = f"{faker.first_name()}"
+new_email = f"{new_name}@mail.ru"
+new_password = "test"
+TEST_DATA_DOREGISTER = []

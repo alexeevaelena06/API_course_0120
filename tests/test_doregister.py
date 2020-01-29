@@ -6,7 +6,7 @@ import pytest
 import requests
 from zeep import client
 from faker import Faker
-from test_data.api_variables_data import *
+from test_data.api_variables_data import DO_REGISTER_REST, TEST_DATA_DOREGISTER, DO_REGISTER_SOAP, WSDL
 
 faker = Faker()
 
@@ -16,8 +16,9 @@ faker = Faker()
 # REST
 
 
+@pytest.mark.parametrize("email, name, password", TEST_DATA_DOREGISTER)
 @pytest.mark.dependency()
-def test_doregister_rest():
+def test_doregister_rest(email, name, password):
     new_name = f"{faker.first_name()}"
     new_email = f"{new_name}@mail.ru"
     print(new_email)
@@ -77,10 +78,8 @@ def test_bind():
 
 def test_operation_proxy_doc():
     client_obj = client.Client(WSDL)
-    assert (
-        client_obj.service["doRegister"].__doc__
-        == 'doRegister(email: xsd:string, name: xsd:string, password: xsd:string) -> UserReturn: ns0:UserReturn'
-    )
+    assert (client_obj.service["doRegister"].__doc__
+            == 'doRegister(email: xsd:string, name: xsd:string, password: xsd:string) -> UserReturn: ns0:UserReturn')
 
 
 def test_client_no_wsdl():
