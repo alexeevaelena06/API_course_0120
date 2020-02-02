@@ -5,6 +5,8 @@ import pytest
 import requests
 from faker import Faker
 from zeep import client, Client, Settings
+
+from api.client import BugRedClient
 from test_data.api_variables_data import DO_REGISTER_REST, DO_REGISTER_SOAP, WSDL, data_user
 
 faker = Faker()
@@ -15,12 +17,15 @@ faker = Faker()
 
 
 @pytest.mark.parametrize("email, name, password", data_user())
-@pytest.mark.dependency()
+@pytest.mark.dependency(name='1')
 def test_doregister_rest(email, name, password):
     print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
     doregister = requests.post(url=DO_REGISTER_REST.format(email, name, password))
     print(doregister.text.encode('utf8'))
     assert doregister.text.encode('utf8'), f'Refused request. Server answer {doregister}'
+    client = BugRedClient("http://users.bugred.ru")
+    client.authorize(email, password)
+
 
 
 @pytest.mark.parametrize("email, name, password", data_user())
@@ -34,12 +39,14 @@ def test_doregister_rest_2(client, email, name, password):
     res = client.vr(client.do_register(data), [200, 201])
     created = res.json()
     print(created)
+    client = BugRedClient("http://users.bugred.ru")
+    client.authorize(email, password)
 
 
 # SOAP
 
 @pytest.mark.parametrize("email, name, password", data_user())
-@pytest.mark.dependency(depends=["test_doregister_rest"])
+@pytest.mark.dependency(name='3', depends=['1'])
 def test_doregister_soap(email, name, password):
     print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
     url = DO_REGISTER_SOAP
@@ -57,6 +64,8 @@ def test_doregister_soap(email, name, password):
     response = requests.post(url, data=body, headers=headers)
     print(response.content)
     assert response.text.encode('utf8'), f'Refused request. Server answer {response}'
+    client = BugRedClient("http://users.bugred.ru")
+    client.authorize(email, password)
 
 
 @pytest.mark.parametrize("email, name, password", data_user())
@@ -66,6 +75,8 @@ def test_doregister_soap_2(email, name, password):
     client = Client(WSDL, settings=settings)
     new_user = client.service.doRegister(email=email, name=name, password=password)
     assert new_user, 'Новый пользователь не создан'
+    client = BugRedClient("http://users.bugred.ru")
+    client.authorize(email, password)
 
 
 """WSDL"""

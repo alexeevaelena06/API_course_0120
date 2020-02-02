@@ -3,9 +3,9 @@ from api.client import BugRedClient
 
 
 @pytest.fixture(scope="session")
-def client():
+def client(email="manager@mail.ru", password='1'):
     client = BugRedClient("http://users.bugred.ru")
-    client.authorize("manager@mail.ru", "1")
+    client.authorize(email, password)
     return client
 
 
