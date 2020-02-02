@@ -1,41 +1,35 @@
 # Алексеева Елена
 # documentation https://testbase.atlassian.net/wiki/spaces/USERS/pages/592674928/doRegister
 # pytest.dependency  https://pytest-dependency.readthedocs.io/en/latest/usage.html
-
 import pytest
 import requests
-from zeep import client
 from faker import Faker
-from test_data.api_variables_data import DO_REGISTER_REST, TEST_DATA_DOREGISTER, DO_REGISTER_SOAP, WSDL
+from zeep import client, Client, Settings
+from test_data.api_variables_data import DO_REGISTER_REST, DO_REGISTER_SOAP, WSDL, data_user
 
 faker = Faker()
-
 
 """DoRegister"""
 
 # REST
 
 
-@pytest.mark.parametrize("email, name, password", TEST_DATA_DOREGISTER)
+@pytest.mark.parametrize("email, name, password", data_user())
 @pytest.mark.dependency()
 def test_doregister_rest(email, name, password):
-    new_name = f"{faker.first_name()}"
-    new_email = f"{new_name}@mail.ru"
-    print(new_email)
-    doregister = requests.post(url=DO_REGISTER_REST.format(new_email, new_name, "test"))
+    print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
+    doregister = requests.post(url=DO_REGISTER_REST.format(email, name, password))
     print(doregister.text.encode('utf8'))
     assert doregister.text.encode('utf8'), f'Refused request. Server answer {doregister}'
 
 
-def test_doregister_rest_2(client):
-    new_name = f"{faker.first_name()}"
-    new_email = f"{new_name}@mail.ru"
-    print(new_email)
-
+@pytest.mark.parametrize("email, name, password", data_user())
+def test_doregister_rest_2(client, email, name, password):
+    print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
     data = {
-        "email": new_email,
-        "name": new_name,
-        "password": "1"
+        "email": email,
+        "name": name,
+        "password": password
     }
     res = client.vr(client.do_register(data), [200, 201])
     created = res.json()
@@ -44,27 +38,34 @@ def test_doregister_rest_2(client):
 
 # SOAP
 
-
+@pytest.mark.parametrize("email, name, password", data_user())
 @pytest.mark.dependency(depends=["test_doregister_rest"])
-def test_doregister_soap():
+def test_doregister_soap(email, name, password):
+    print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
     url = DO_REGISTER_SOAP
     headers = {'content-type': 'text/xml'}
-    new_name = f"{faker.first_name()}"
-    new_email = f"{new_name}@mail.ru"
     body = f"""<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wrap="http://foo.bar/wrappersoapserver">
                    <soapenv:Header/>
                    <soapenv:Body>
                       <wrap:doRegister>
-                         <email>{new_email}</email>
-                         <name>{new_name}</name>
-                         <password>test</password>
+                         <email>{email}</email>
+                         <name>{name}</name>
+                         <password>{password}</password>
                       </wrap:doRegister>
                    </soapenv:Body>
                 </soapenv:Envelope>"""
-    print(new_email)
     response = requests.post(url, data=body, headers=headers)
     print(response.content)
     assert response.text.encode('utf8'), f'Refused request. Server answer {response}'
+
+
+@pytest.mark.parametrize("email, name, password", data_user())
+def test_doregister_soap_2(email, name, password):
+    print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
+    settings = Settings(strict=False, xml_huge_tree=True)
+    client = Client(WSDL, settings=settings)
+    new_user = client.service.doRegister(email=email, name=name, password=password)
+    assert new_user, 'Новый пользователь не создан'
 
 
 """WSDL"""

@@ -1,3 +1,6 @@
+# Алексеева Елена
+import random
+import string
 from faker import Faker
 
 faker = Faker()
@@ -13,7 +16,11 @@ CURL_3 = 'curl -d "{\"email\": \"mailchik1@gmail.com\", \"name\": \"Marmelad1\",
 
 """DoRegister"""
 
-new_name = f"{faker.first_name()}"
-new_email = f"{new_name}@mail.ru"
-new_password = "test"
-TEST_DATA_DOREGISTER = []
+
+def data_user():
+    """Формирование нового сета данных для пользователя"""
+    new_name = f"{faker.first_name()}"
+    new_email = f"{new_name}@" + random.choice(['gmail.com', 'mail.ru', 'yandex.ru', 'yahoo.com', 'rambler.ru'])
+    password = ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
+    test_data = [(new_email, new_name, password)]
+    return test_data
