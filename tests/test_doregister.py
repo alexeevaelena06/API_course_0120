@@ -1,6 +1,8 @@
 # Алексеева Елена
 # documentation https://testbase.atlassian.net/wiki/spaces/USERS/pages/592674928/doRegister
 # pytest.dependency  https://pytest-dependency.readthedocs.io/en/latest/usage.html
+# header's documentation - https://developer.mozilla.org/
+
 import pytest
 import requests
 from faker import Faker
