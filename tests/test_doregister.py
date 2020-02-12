@@ -2,6 +2,8 @@
 # documentation https://testbase.atlassian.net/wiki/spaces/USERS/pages/592674928/doRegister
 # pytest.dependency  https://pytest-dependency.readthedocs.io/en/latest/usage.html
 # header's documentation - https://developer.mozilla.org/
+# https://httpstatuses.com/
+
 
 import pytest
 import requests
