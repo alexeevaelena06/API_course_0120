@@ -31,7 +31,6 @@ def test_doregister_rest(email, name, password):
     client.authorize(email, password)
 
 
-
 @pytest.mark.parametrize("email, name, password", data_user())
 def test_doregister_rest_2(client, email, name, password):
     print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
