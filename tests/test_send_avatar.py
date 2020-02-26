@@ -1,5 +1,5 @@
 # Алексеева Елена
-# documentation https://developer.atlassian.com/cloud/jira/platform/rest/v2/#api-rest-api-2-universal-avatar-type-type-owner-entityId-post
+# documentation https://testbase.atlassian.net/wiki/spaces/USERS/pages/994345363/AddAvatar
 
 import pytest
 import requests
