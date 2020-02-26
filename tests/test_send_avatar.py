@@ -1,5 +1,6 @@
 # Алексеева Елена
 # documentation https://testbase.atlassian.net/wiki/spaces/USERS/pages/994345363/AddAvatar
+import os
 
 import pytest
 import requests
@@ -11,7 +12,9 @@ faker = Faker()
 
 
 @pytest.mark.parametrize("email, name, password", data_user())
-def test_send_avatar(email, name, password):
+@pytest.mark.parametrize("file", [(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Python.jpg')), (''),
+                                  ('adfdfdf')])
+def test_send_avatar(email, name, password, file):
     print(f"Новый пользователь email: {email}, name: {name}, password: {password}")
     doregister = requests.post(url=DO_REGISTER_REST.format(email, name, password))
     print(doregister.text.encode('utf-8-sig'))
@@ -19,7 +22,7 @@ def test_send_avatar(email, name, password):
     url = ADD_AVATAR.format(email=email)
     payload = {}
     files = [
-      ('avatar', open('tests//Python.jpg', 'rb'))
+      ('avatar', open(file, 'rb'))
     ]
     headers = {
       'Content-Type': 'multipart/form-data; boundary=--------------------------846395766302543056450567'
