@@ -15,7 +15,7 @@ CURL_2 = 'curl -i -X POST -H "Content-Type: application/json" -d "{\"email\": \"
 CURL_3 = 'curl -d "{\"email\": \"mailchik1@gmail.com\", \"name\": \"Marmelad1\", \"password\": \"1\"}" http://users.bugred.ru/tasks/rest/doregister'
 GET_ISSUE_LINK = 'https://testbase.atlassian.net/rest/api/2/issueLink/{}'
 CREATE_ISSUE_LINK = 'https://testbase.atlassian.net/rest/api/2/issueLink'
-ADD_AVATAR = 'http://users.bugred.ru/tasks/rest/addavatar/?email={email}'
+ADD_AVATAR = 'http://users.bugred.ru/tasks/rest/addavatar/?email={}'
 
 """DoRegister"""
 
